@@ -73,7 +73,7 @@ void print_line(addr_line *line) {
     int j = i;
     while (j < temp.st_size && code[j] != '\n') j++;
     cnt++;
-    if (cnt == line->line - 1) {
+    if (cnt == line->line) {
       code[j] = '\0';
       sprint("Runtime error at %s:%d\n%s\n", filepath, line->line, code + i);
       break;

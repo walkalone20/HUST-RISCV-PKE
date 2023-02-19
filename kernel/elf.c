@@ -215,7 +215,7 @@ elf_status elf_load(elf_ctx *ctx) {
     if (ph_addr.vaddr + ph_addr.memsz > linecnt)
       linecnt = ph_addr.vaddr + ph_addr.memsz;
   }
-  elf_sect_header sh_addr, debug_seg;
+  elf_sect_header sh_addr;
   int sh_size = ctx->ehdr.shentsize;
 
   // load section name string table
@@ -228,13 +228,12 @@ elf_status elf_load(elf_ctx *ctx) {
 
   // traverse the elf section headers
   for (i = 0, off = ctx->ehdr.shoff; i < ctx->ehdr.shnum; i++, off += sh_size) {
-    if (elf_fpread(ctx, &debug_seg, sizeof(debug_seg), off) != sizeof(debug_seg))
+    if (elf_fpread(ctx, &sh_addr, sizeof(sh_addr), off) != sizeof(sh_addr))
       return EL_EIO;
     if (!strcmp(elf_shstrtab + sh_addr.name, ".debug_line")) {
-      if (elf_fpread(ctx, (void *)linecnt, debug_seg.size, debug_seg.offset) != debug_seg.size)
+      if (elf_fpread(ctx, (void *)linecnt, sh_addr.size, sh_addr.offset) != sh_addr.size)
         return EL_EIO;
-      make_addr_line(ctx, (char *)linecnt, debug_seg.size);
-      break;
+      make_addr_line(ctx, (char *)linecnt, sh_addr.size);
     }
   }
   return EL_OK;

@@ -39,6 +39,7 @@ void handle_mtrap() {
     case CAUSE_LOAD_ACCESS:
       print_error_line();
       handle_load_access_fault();
+      break;
     case CAUSE_STORE_ACCESS:
       print_error_line();
       handle_store_access_fault();

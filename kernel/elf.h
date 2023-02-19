@@ -52,7 +52,7 @@ typedef struct elf_sect_header_t{
 } elf_sect_header;
 
 // compilation units header (in debug line section)
-typedef struct __attribute__ {
+typedef struct __attribute__((packed)) {
     uint32 length;
     uint16 version;
     uint32 header_length;
